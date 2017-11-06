@@ -56,37 +56,57 @@ class getTweet:
                         maxi = to_save[-1]['id']
             
             # GET USER FOLLOWERS AND EXPORTING WITH PICKLE   
-                elif self.request == 'followers':
-                    query = api.GetFollowers(screen_name = self.keyword, count = batchsize)
+                elif self.request == 'userposts':
+                    query = api.GetUserTimeline(screen_name = self.keyword, count = batchsize, max_id = maxi)
                     to_save = [query[i].AsDict() for i in range(len(query))]
                     with open('%s_%d.pkl' % (self.request, f), 'wb') as handle:
                         pickle.dump(to_save, handle)
+                
+                # INCREMENT MAX_ID AND ITERATE. RETURN ALL DATA IF MAX_ID IS REACHED
+                    f += 1
+                    if maxi == to_save[-1]['id']:
+                        output = []
+                        for i in range(f):
+                            with open('%s_%d.pkl' % (self.request, i), 'rb') as handle:
+                                output.extend([t['text'] for t in pickle.load(handle)])
+                        return output
+                        break
+                    else:
+                        maxi = to_save[-1]['id']
             
-                # RETURN ALL DATA
-                    output = []
-                    with open('%s_%d.pkl' % (self.request, f), 'rb') as handle:
-                        output.extend([t['screen_name'] for t in pickle.load(handle)])
-                    return output
-                    break
-                       
+            # GET ALL MATCHES ON GLOBAL SEARCH         
+                elif self.request == 'search':
+                    query = api.GetSearch(term = self.keyword, count = batchsize, max_id = maxi)
+                    to_save = [query[i].AsDict() for i in range(len(query))]
+                    with open('%s_%d.pkl' % (self.request, f), 'wb') as handle:
+                        pickle.dump(to_save, handle)
+                
+                # INCREMENT MAX_ID AND ITERATE. RETURN ALL DATA IF MAX_ID IS REACHED
+                    f += 1
+                    if maxi == to_save[-1]['id']:
+                        output = []
+                        for i in range(f):
+                            with open('%s_%d.pkl' % (self.request, i), 'rb') as handle:
+                                output.extend([t['text'] for t in pickle.load(handle)])
+                        return output
+                        break
+                    else:
+                        maxi = to_save[-1]['id']
             except:
                 print(sys.exc_info()[0])
                 break
             
 
-# HOW TO CALL METHODS ACCORDING TO CLASS ARGUMENTS?
-
+# OTHER ARGUMENTS TO IMPLEMENT: HOW TO CREATE BATCHES WITHOUT MAX_ID AS CRITERIA?
+#                elif self.request == 'followers'
+#                    query = api.GetFollowers(screen_name = keyword, count = batchsize)
 #                elif self.request == 'friends':
 #                    query = api.GetFriends(screen_name = self.keyword, count = batchsize, max_id = maxi)
-#                elif self.request == 'userposts':
-#                    query = api.GetUserTimeline(screen_name = self.keyword, count = batchsize, max_id = maxi)
-#                else:
-#                    query = api.GetSearch(term = self.keyword, count = batchsize, max_id = maxi)
 
 
 """                  
           
-test = getTweet('burnie093','followers').create_request()
+test = getTweet('burnie093','search').create_request()
 print(len(test))
 
 # ADDITIONAL FORMATS, IF NECESSARY
