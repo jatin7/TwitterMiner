@@ -102,12 +102,11 @@ class getTweet:
 #                    query = api.GetFollowers(screen_name = keyword, count = batchsize)
 #                elif self.request == 'friends':
 #                    query = api.GetFriends(screen_name = self.keyword, count = batchsize, max_id = maxi)
-
-
-"""                  
           
-test = getTweet('burnie093','search').create_request()
-print(len(test))
+#test = getTweet('burnie093','userlikes').create_request()
+#print(len(test))
+
+"""
 
 # ADDITIONAL FORMATS, IF NECESSARY
     #id/tweet tuples
