@@ -36,7 +36,7 @@ class getTweet:
     # LOOP WHILE MOST RECENT TWEET IS NOT RETRIEVED
         while True: 
             try:
-            # GET USERLIKES AND EXPORTING WITH PICKLE
+            # GET USERLIKES AND EXPORT WITH PICKLE
                 if self.request == 'userlikes':
                     query = api.GetFavorites(screen_name = self.keyword, count = batchsize, max_id = maxi)
                     to_save = [query[i].AsDict() for i in range(len(query))]
@@ -55,7 +55,7 @@ class getTweet:
                     else:
                         maxi = to_save[-1]['id']
             
-            # GET USER FOLLOWERS AND EXPORTING WITH PICKLE   
+            # GET USER FOLLOWERS AND EXPORT WITH PICKLE   
                 elif self.request == 'userposts':
                     query = api.GetUserTimeline(screen_name = self.keyword, count = batchsize, max_id = maxi)
                     to_save = [query[i].AsDict() for i in range(len(query))]
@@ -74,7 +74,7 @@ class getTweet:
                     else:
                         maxi = to_save[-1]['id']
             
-            # GET ALL MATCHES ON GLOBAL SEARCH         
+            # GET ALL MATCHES ON GLOBAL SEARCH AND EXPORT WITH PICKLE  
                 elif self.request == 'search':
                     query = api.GetSearch(term = self.keyword, count = batchsize, max_id = maxi)
                     to_save = [query[i].AsDict() for i in range(len(query))]
