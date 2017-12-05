@@ -3,7 +3,7 @@ import pickle
 import sys # so as to know the error
 
 
-class getTweet:
+class TweetFetcher:
     """ Create a request with the Twitter API. Types of request:
             'userposts': Get posts created by an user, username as the keyword
             'followers': Get followers of an user, username as the keyword

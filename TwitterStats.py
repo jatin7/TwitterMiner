@@ -6,8 +6,8 @@ from scipy.stats.kde import gaussian_kde
 #import matplotlib.ticker as tick
 #import pandas as pd
 
-class getTweetStats:
-    """ Summary statistics for Tweets"""
+class TweetStats:
+    """ Summary statistics for tweets """
     
     def __init__(self, input):
         self.input = input
@@ -50,13 +50,13 @@ class getTweetStats:
             'St Dev': self.stdev(), 'IQR': self.iqr()}
         return result
 
-class getTweetPlots:
-    """Plotting data distribution based on the Twitter dataset"""
+class TweetPlots:
+    """ Plotting data distribution based on the Twitter dataset """
 
     def __init__(self,input):
         self.input = input
 
-    def getmeasures(self):
+    def get_measures(self):
         wordcount = [len(self.input[i]) for i in range(len(self.input))]
         charcount = [len(self.input[i].split()) for i in range(len(self.input))]
         return wordcount, charcount     
@@ -65,7 +65,7 @@ class getTweetPlots:
         # CREATE BOXPLOTS
         fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(10,5))
         
-        boxplt1 = axes[0].boxplot(self.getmeasures()[0],
+        boxplt1 = axes[0].boxplot(self.get_measures()[0],
                                   whis='range',
                                   showfliers=False,
                                   vert=True,
@@ -75,7 +75,7 @@ class getTweetPlots:
         axes[0].set_title('Character distribution per tweet')
         #plt.xticks([])
         
-        boxplt2 = axes[1].boxplot(self.getmeasures()[1],
+        boxplt2 = axes[1].boxplot(self.get_measures()[1],
                                   whis='range',
                                   showfliers=False,
                                   vert=True,
@@ -107,10 +107,10 @@ class getTweetPlots:
     def create_densplt(self):
         # CREATE DENSITY PLOTS
         # probability is calculated by using a gaussian function (kernel density estimation)
-        kde_chars = gaussian_kde(self.getmeasures()[0])
-        kde_words = gaussian_kde(self.getmeasures()[1])
-        dist_chars = np.linspace(min(self.getmeasures()[0]), max(self.getmeasures()[0]), 100)
-        dist_words = np.linspace(min(self.getmeasures()[1]), max(self.getmeasures()[1]), 100)
+        kde_chars = gaussian_kde(self.get_measures()[0])
+        kde_words = gaussian_kde(self.get_measures()[1])
+        dist_chars = np.linspace(min(self.get_measures()[0]), max(self.get_measures()[0]), 100)
+        dist_words = np.linspace(min(self.get_measures()[1]), max(self.get_measures()[1]), 100)
         
         fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(10,5))
         densplt1 = axes[0].plot(dist_chars, kde_chars(dist_chars),
@@ -133,44 +133,34 @@ class getTweetPlots:
             x.spines['right'].set_color('#dddddd')
         plt.show()
         
+    def create_hist(self):
+        # CREATE FREQUENCY CHARTS
+        taglabel = list(zip(*self.input[0:15]))[0]
+        tagcount = list(zip(*self.input[0:15]))[1]
+        x_pos = np.arange(len(taglabel)) 
+        
+        # creating trendline with two points (x,y) 
+        # fits a polynomial function into a linear function that minimises the squared error
+        slope, intercept = np.polyfit(x_pos, tagcount, 1)
+        trendline = intercept + (slope * x_pos)
+        
+        plt.figure(num=None, figsize=(12,8), dpi=80, facecolor='w', edgecolor='k')
+        plt.plot(x_pos, trendline, color='red', linestyle='--')    
+        plt.bar(x_pos, tagcount, align='center')
+        plt.xticks(x_pos, taglabel) 
+        plt.ylabel('Number of occurences')
+        plt.xticks(rotation=45)
+        plt.gca().set_axisbelow(True) #plt.gca() gets current axis attributes
+        plt.gca().yaxis.grid(True)
+        plt.show()
+        
 #x = [0,1,2,5,8,8]
 #y = [40,50,50,60,40,80]
-#
-#jesus = x, y
-#jesus[1]
-#
-#test = getTweetStats(x).summary()
-#
+
 #numpyiqr = (np.subtract(*np.percentile(wordplot, [75, 25], interpolation='linear')))
 #print(numpyiqr)
-#iqr(wordplot)
-#
-#jesus = getTweetPlots(test).create_boxplt()
-#jesus2 = getTweetPlots(test).create_densplt()
         
-        
-## STEP X: Plotting: Histogram
-#taglabel = list(zip(*hashtags_freq[0:13]))[0]
-#tagcount = list(zip(*hashtags_freq[0:13]))[1]
-#x_pos = np.arange(len(taglabel)) 
-#
-## creating trendline with two points (x,y) 
-## fits a polynomial function into a linear function that minimises the squared error
-#slope, intercept = np.polyfit(x_pos, tagcount, 1)
-#trendline = intercept + (slope * x_pos)
-#
-#plt.figure(num=None, figsize=(12,8), dpi=80, facecolor='w', edgecolor='k')
-#plt.plot(x_pos, trendline, color='red', linestyle='--')    
-#plt.bar(x_pos, tagcount, align='center')
-#plt.xticks(x_pos, taglabel) 
-#plt.ylabel('Number of occurences')
-#plt.xticks(rotation=45)
-#plt.gca().set_axisbelow(True) #plt.gca() gets current axis attributes
-#plt.gca().yaxis.grid(True)
-#plt.show()
-
 # STEP X: Plotting: Social Network Analysis
-
 
 # to export plots fig.savefig() or plt.savefig()
 # to browse plot styles plt.style.available() and plt.style.use()
