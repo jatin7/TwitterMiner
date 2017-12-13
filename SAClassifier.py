@@ -15,7 +15,7 @@ import random
 # REMOVE STOPWORDS, PUNCTUATION AND CREATE TUPLES (WORDS,CLASS)
 stop = stopwords.words('english')
 documents = [([w for w in mr.words(i) if w.lower() not in stop and w.lower() not in string.punctuation], i.split('/')[0]) for i in mr.fileids()]
-#potato = lemma().lemmatize([i for i,j in documents])
+#test = lemma().lemmatize([i for i,j in documents])
 
 random.shuffle(documents)
 
