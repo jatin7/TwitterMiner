@@ -1,2 +1,2 @@
 # TwitterMiner
-Collect and process public data from Twitter
+Collect and process public data from Twitter.
